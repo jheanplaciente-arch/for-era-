@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Rebirth: eracutiee</title>
+    <style>
+        :root {
+            --space-black: #010409;
+            --accent-gold: #ffd700;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background: var(--space-black);
+            overflow: hidden;
+            font-family: 'Trebuchet MS', sans-serif;
+        }
+
+        /* 1. Starfield */
+        .stars {
+            position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(white, rgba(255,255,255,.2) 1px, transparent 20px);
+            background-size: 80px 80px;
+            animation: moveStars 100s linear infinite;
+        }
+        @keyframes moveStars { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
+
+        /* 2. Celestial Bodies */
+        .planet {
+            position: absolute; border-radius: 50%;
+            cursor: pointer; z-index: 50;
+            transition: opacity 0.5s, transform 0.3s;
+        }
+        .planet:hover { transform: scale(1.1); filter: brightness(1.2); }
+
+        .earth { top: 50%; left: 10%; width: 80px; height: 80px; background: url('https://upload.wikimedia.org') center/cover; animation: spin 15s linear infinite; }
+        .venus { width: 35px; height: 35px; background: #e3bb76; top: 15%; left: 25%; }
+        .uranus { width: 45px; height: 45px; background: #ace5ee; bottom: 15%; right: 15%; }
+        .sun { width: 100px; height: 100px; background: #ffcc00; top: 5%; right: 5%; box-shadow: 0 0 50px #ff9900; }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* 3. Explosion Effect */
+        .explosion {
+            position: absolute; border-radius: 50%;
+            background: radial-gradient(circle, #fff, #ff9900, #ff4d00, transparent);
+            transform: scale(0); animation: explodeEffect 0.5s ease-out forwards;
+            pointer-events: none; z-index: 60;
+        }
+        @keyframes explodeEffect { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
+
+        /* 4. Rocket & Moon */
+        .moon {
+            position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
+            width: 200px; height: 200px; background: #e6e6e6; border-radius: 50%;
+            box-shadow: inset -20px -20px 40px #999, 0 0 30px rgba(255,255,255,0.1);
+        }
+
+        .rocket-container {
+            position: absolute; bottom: 45%; left: 50%; transform: translateX(-50%) scale(0.65);
+            display: flex; flex-direction: column; align-items: center; z-index: 100;
+        }
+
+        .rocket-top {
+            width: 60px; height: 130px; background: #fff; border-radius: 50% 50% 10% 10%;
+            position: relative; border-left: 4px solid #ccc;
+        }
+
+        .window {
+            position: absolute; top: 35px; left: 50%; transform: translateX(-50%);
+            width: 45px; height: 45px; background: #222; border: 3px solid var(--accent-gold);
+            border-radius: 50%; overflow: hidden;
+        }
+
+        .window img { width: 100%; height: 100%; object-fit: cover; }
+        .fin { width: 100px; height: 40px; background: #ff4d4d; position: absolute; bottom: 10px; z-index: -1; clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%); }
+        .fire { width: 25px; height: 40px; background: linear-gradient(#ff9100, transparent); animation: flicker 0.1s infinite; }
+        @keyframes flicker { 0% { height: 30px; } 100% { height: 50px; } }
+
+        /* 5. UI Elements */
+        .final-message {
+            position: absolute; top: 45%; width: 100%; text-align: center;
+            color: var(--accent-gold); font-size: 3.5rem; font-weight: bold;
+            text-shadow: 0 0 20px #ffaa00; z-index: 110;
+        }
+
+        .rebirth-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            padding: 15px 25px; background: rgba(255, 215, 0, 0.2);
+            border: 2px solid var(--accent-gold); color: var(--accent-gold);
+            border-radius: 50px; cursor: pointer; font-weight: bold;
+            text-transform: uppercase; transition: 0.3s; z-index: 200;
+        }
+        .rebirth-btn:hover { background: var(--accent-gold); color: black; box-shadow: 0 0 20px var(--accent-gold); }
+
+    </style>
+</head>
+<body>
+
+    <div class="stars"></div>
+    
+    <!-- Planets -->
+    <div id="sun" class="planet sun" onclick="explode(this)"></div>
+    <div id="earth" class="planet earth" onclick="explode(this)"></div>
+    <div id="venus" class="planet venus" onclick="explode(this)"></div>
+    <div id="uranus" class="planet uranus" onclick="explode(this)"></div>
+    
+    <div class="moon"></div>
+
+    <div class="rocket-container">
+        <div class="rocket-top">
+            <div class="window">
+                <!-- Using the image you provided -->
+                <img src="https://i.ibb.co" alt="eracutiee">
+            </div>
+            <div class="fin"></div>
+        </div>
+        <div class="fire"></div>
+    </div>
+
+    <div class="final-message">ilysm, eracutiee</div>
+
+    <button class="rebirth-btn" onclick="rebirth()">✨ Cosmic Rebirth</button>
+
+    <script>
+        function explode(element) {
+            const rect = element.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+
+            const boom = document.createElement('div');
+            boom.className = 'explosion';
+            boom.style.left = (x - 50) + 'px';
+            boom.style.top = (y - 50) + 'px';
+            boom.style.width = '100px';
+            boom.style.height = '100px';
+            
+            document.body.appendChild(boom);
+            element.style.opacity = '0';
+            element.style.pointerEvents = 'none';
+
+            setTimeout(() => boom.remove(), 500);
+        }
+
+        function rebirth() {
+            const planets = document.querySelectorAll('.planet');
+            planets.forEach(p => {
+                p.style.opacity = '1';
+                p.style.pointerEvents = 'all';
+                p.style.transform = 'scale(0)';
+                // Small delay to trigger the pop-in effect
+                setTimeout(() => {
+                    p.style.transform = 'scale(1)';
+                }, 100);
+            });
+        }
+    </script>
+
+</body>
+      </html>
+      
